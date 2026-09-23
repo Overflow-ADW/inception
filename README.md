@@ -6,14 +6,20 @@ The goal is to build a small multi-container web stack from individual Dockerfil
 
 ## Architecture
 
-```text
-                    HTTPS :443
-                        │
-                     Nginx
-                        │
-                    WordPress
-                        │
-                     MariaDB
+```mermaid
+flowchart TD
+    U[Browser] -->|HTTPS :443| N[Nginx]
+    N --> W[WordPress / PHP-FPM]
+    W --> M[MariaDB]
+
+    W --> WV[(WordPress volume)]
+    M --> MV[(MariaDB volume)]
+
+    subgraph Docker network
+        N
+        W
+        M
+    end
 ```
 
 The three services communicate through a dedicated Docker network.
